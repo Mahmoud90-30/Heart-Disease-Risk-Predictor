@@ -24,7 +24,7 @@ from PySide6.QtWidgets import (
 
 
 MODEL_PATH = Path("model.pkl")
-
+SCALER_PATH = Path("scaler.pkl")
 
 class HeartGuard(QMainWindow):
 
@@ -38,6 +38,7 @@ class HeartGuard(QMainWindow):
         self.setMinimumSize(1100, 750)
 
         self.model = None
+        self.scaler=None
 
         self.load_model()
         self.build_ui()
@@ -48,15 +49,19 @@ class HeartGuard(QMainWindow):
 
     def load_model(self):
 
-        if MODEL_PATH.exists():
+     if MODEL_PATH.exists():
+        try:
+            self.model = joblib.load(MODEL_PATH)
+        except Exception as e:
+            self.model = None
+            print("Model loading error:", e)
 
-            try:
-                self.model = joblib.load(MODEL_PATH)
-
-            except Exception as e:
-                self.model = None
-                print("Model loading error:", e)
-
+     if SCALER_PATH.exists():
+        try:
+            self.scaler = joblib.load(SCALER_PATH)
+        except Exception as e:
+            self.scaler = None
+            print("Scaler loading error:", e)
     # =====================================================
     # Build UI
     # =====================================================
@@ -741,48 +746,35 @@ class HeartGuard(QMainWindow):
             return
 
         data = pd.DataFrame(
-            [
-                {
+        [
+         {
+            "Age": self.age.value(),
+            "Sex": 1 if self.sex.currentText() == "M" else 0,
+            "RestingBP": self.resting_bp.value(),
+            "Cholesterol": self.cholesterol.value(),
+            "FastingBS": int(self.fasting_bs.currentText()),
+            "MaxHR": self.max_hr.value(),
+            "ExerciseAngina": 1 if self.exercise_angina.currentText() == "Y" else 0,
+            "Oldpeak": self.oldpeak.value(),
 
-                    "Age":
-                        self.age.value(),
+            "ChestPainType_ATA_True": int(self.chest_pain.currentText() == "ATA"),
+            "ChestPainType_NAP_True": int(self.chest_pain.currentText() == "NAP"),
+            "ChestPainType_TA_True": int(self.chest_pain.currentText() == "TA"),
 
-                    "Sex":
-                        self.sex.currentText(),
+            "RestingECG_Normal_True": int(self.resting_ecg.currentText() == "Normal"),
+            "RestingECG_ST_True": int(self.resting_ecg.currentText() == "ST"),
 
-                    "ChestPainType":
-                        self.chest_pain.currentText(),
+            "ST_Slope_Flat_True": int(self.st_slope.currentText() == "Flat"),
+            "ST_Slope_Up_True": int(self.st_slope.currentText() == "Up"),
+        }
+    ]
+)
 
-                    "RestingBP":
-                        self.resting_bp.value(),
-
-                    "Cholesterol":
-                        self.cholesterol.value(),
-
-                    "FastingBS":
-                        int(
-                            self.fasting_bs.currentText()
-                        ),
-
-                    "RestingECG":
-                        self.resting_ecg.currentText(),
-
-                    "MaxHR":
-                        self.max_hr.value(),
-
-                    "ExerciseAngina":
-                        self.exercise_angina.currentText(),
-
-                    "Oldpeak":
-                        self.oldpeak.value(),
-
-                    "ST_Slope":
-                        self.st_slope.currentText()
-
-                }
-            ]
-        )
-
+        if self.scaler is not None:
+             data = pd.DataFrame(
+              self.scaler.transform(data),
+         columns=data.columns
+          )
         try:
 
             prediction = int(
