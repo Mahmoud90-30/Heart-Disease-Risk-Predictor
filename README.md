@@ -140,7 +140,7 @@ This project is for educational purposes only. Predictions produced by this mode
 
 ## Authors
 
-Omar Tharwat
+Omar Tharwat\n
 Mahmoud Moheb
 Seif Ahmed
 Sondos Sobhy
