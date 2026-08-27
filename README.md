@@ -25,7 +25,7 @@ The dataset (`heart.csv`) contains 918 patient records with 11 clinical features
 | ST_Slope | Slope of the peak exercise ST segment (Up, Flat, Down) |
 | HeartDisease | Target variable (1 = heart disease, 0 = normal) |
 
-Source: [UCI Heart Failure Prediction Dataset]([https://www.kaggle.com/datasets/fedesoriano/heart-failure-prediction](https://www.kaggle.com/datasets/amirmahdiabbootalebi/heart-disease))
+Source: [UCI Heart Failure Prediction Dataset](https://www.kaggle.com/datasets/amirmahdiabbootalebi/heart-disease)
 
 ## Project Workflow
 
