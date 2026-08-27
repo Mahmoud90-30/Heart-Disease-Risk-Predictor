@@ -140,11 +140,11 @@ This project is for educational purposes only. Predictions produced by this mode
 
 ## Authors
 
-Omar Tharwat\n
-Mahmoud Moheb
-Seif Ahmed
-Sondos Sobhy
-Nada Sayed
+Omar Tharwat / 
+ Mahmoud Moheb /
+ Seif Ahmed /
+ Sondos Sobhy /
+ Nada Sayed 
 
 ## License
 
